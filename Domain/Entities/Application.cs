@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +28,14 @@ namespace Domain.Entities
         [Url]
         public string? LinkedInUrl { get; set; } = string.Empty;
 
+        [Column(TypeName = "decimal(18,2)")]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "ExpectedSalary must be non-negative")]
         public decimal? ExpectedSalary { get; set; }
 
         // Navigation
         public Candidate Candidate { get; set; } = null!;
         public Vacancy Vacancy { get; set; } = null!;
+        public ICollection<AssessmentSession> AssessmentSessions { get; set; } = new List<AssessmentSession>();
         public ICollection<Interview> Interviews { get; set; } = new List<Interview>();
     }
 }

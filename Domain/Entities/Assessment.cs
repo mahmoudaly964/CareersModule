@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 namespace Domain.Entities
 {
     public class Assessment : BaseEntity
-    {
-        public Guid Id { get; set; }
-        
+    {   
         [Required]
         public Guid VacancyId { get; set; }
         
@@ -29,6 +27,7 @@ namespace Domain.Entities
 
         // Navigation
         public Vacancy Vacancy { get; set; } = null!;
+        public ICollection<AssessmentSession> AssessmentSessions { get; set; } = new List<AssessmentSession>();
         public ICollection<Question> Questions { get; set; } = new List<Question>();
     }
 

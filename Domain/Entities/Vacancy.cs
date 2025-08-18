@@ -29,6 +29,7 @@ namespace Domain.Entities
         public bool IsPublished { get; set; }
 
         // Navigation
+        public ICollection<Assessment> Assessments { get; set; } = new List<Assessment>();
         public ICollection<Application> Applications { get; set; } = new List<Application>();
     }
 }

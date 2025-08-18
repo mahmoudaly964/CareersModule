@@ -20,5 +20,6 @@ namespace Domain.Entities
 
         // Navigation
         public Question Question { get; set; } = null!;
+        public ICollection<CandidateAnswer> CandidateAnswers { get; set; } = new List<CandidateAnswer>(); // ✅ Add this missing property
     }
 }

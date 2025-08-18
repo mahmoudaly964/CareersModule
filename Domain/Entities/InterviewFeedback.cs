@@ -13,9 +13,6 @@ namespace Domain.Entities
         public Guid InterviewId { get; set; }
         
         [Required]
-        public Guid InterviewerId { get; set; }
-        
-        [Required]
         [Range(1, 10)]
         public int Rating { get; set; }
         
@@ -25,7 +22,6 @@ namespace Domain.Entities
 
         // Navigation
         public Interview Interview { get; set; } = null!;
-        public User Interviewer { get; set; } = null!;
     }
 
 }
