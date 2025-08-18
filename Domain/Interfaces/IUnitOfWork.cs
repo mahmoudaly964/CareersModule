@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Repository_Interfaces
+namespace Domain.Interfaces
 {
-    public interface IQuestionOptionRepository
+    public interface IUnitOfWork
     {
+        Task<int> SaveChangesAsync();
     }
 }

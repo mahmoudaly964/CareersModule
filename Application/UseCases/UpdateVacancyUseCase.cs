@@ -11,28 +11,27 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class AddVacancyUseCase : IAddVacancyUseCase
+    public class UpdateVacancyUseCase : IUpdateVacancyUseCase
     {
         private readonly IVacancyRepository _vacancyRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public AddVacancyUseCase(IVacancyRepository vacancyRepository, IUnitOfWork unitOfWork,IMapper mapper)
+        public UpdateVacancyUseCase(IVacancyRepository vacancyRepository, IUnitOfWork unitOfWork,IMapper mapper)
         {
             _vacancyRepository = vacancyRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task ExecuteAsync(AddVacancyDTO newVacancy)
+        public async Task ExecuteAsync(UpdateVacancyDTO updateVacancyDTO,Guid vacancyId)
         {
-            if (newVacancy == null)
+            var existingVacancy = await _vacancyRepository.GetByIdAsync(vacancyId);
+            if(existingVacancy == null)
             {
-                throw new ArgumentNullException(nameof(newVacancy), "Vacancy data cannot be null.");
+                throw new KeyNotFoundException($"Vacancy with ID {vacancyId} not found.");
             }
-            
-            var vacancy = _mapper.Map<Vacancy>(newVacancy);
-            await _vacancyRepository.AddAsync(vacancy);
+            _mapper.Map( updateVacancyDTO, existingVacancy);
+            await _vacancyRepository.UpdateAsync(existingVacancy);
             await _unitOfWork.SaveChangesAsync();
-
         }
     }
 }

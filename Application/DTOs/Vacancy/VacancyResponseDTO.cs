@@ -9,12 +9,14 @@ namespace Application.DTOs.Vacancy
 {
     public class VacancyResponseDTO
     {
+        public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
         public string RequiredQualifications { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public DateTime Deadline { get; set; }
+        public bool IsPublished { get; set; }
 
     }
 }

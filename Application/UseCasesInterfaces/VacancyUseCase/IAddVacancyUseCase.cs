@@ -4,6 +4,6 @@ namespace Application.UseCasesInterfaces.Vacancy
 {
     public interface IAddVacancyUseCase
     {
-        public Task<bool> ExcuteAsync(AddVacancyDTO newVacancy);
+        public Task ExecuteAsync(AddVacancyDTO newVacancy);
     }
 }

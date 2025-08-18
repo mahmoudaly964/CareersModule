@@ -1,7 +1,9 @@
-﻿namespace Application.UseCasesInterfaces.Vacancy
+﻿using Application.DTOs.Vacancy;
+
+namespace Application.UseCasesInterfaces.Vacancy
 {
     public interface IUpdateVacancyUseCase
     {
-        public Task<bool> ExcuteAsync();
+        public Task ExecuteAsync(UpdateVacancyDTO updateVacancyDTO,Guid vacancyId);
     }
 }

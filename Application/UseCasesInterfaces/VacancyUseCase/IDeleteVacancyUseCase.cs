@@ -2,6 +2,6 @@
 {
     public interface IDeleteVacancyUseCase
     {
-        public Task<bool> ExcuteAsync();
+        public Task ExecuteAsync(Guid vacancyId);
     }
 }
