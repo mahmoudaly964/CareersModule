@@ -16,7 +16,7 @@ namespace Application.Exceptions
         {
         }
 
-        public NotFoundException(string name, object key) : base($"{name} with key '{key}' was not found.")
+        public NotFoundException(string name, object key) : base($"{name} with Id '{key}' was not found.")
         {
         }
     }

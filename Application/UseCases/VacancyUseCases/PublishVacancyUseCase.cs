@@ -30,7 +30,7 @@ namespace Application.UseCases.VacancyUseCases
             {
                 throw new NotFoundException("Vacancy", vacancyId);
             }
-            await _vacancyRepository.UnPublishVacancy(vacancyId);
+            await _vacancyRepository.PublishVacancy(vacancyId);
             await _unitOfWork.SaveChangesAsync();
         }
     }

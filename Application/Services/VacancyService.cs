@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class VacancyServices : IVacancyService
+    public class VacancyService : IVacancyService
     {
         private readonly IAddVacancyUseCase _addVacancyUseCase;
         private readonly IGetVacancyUseCase _getVacancyUseCase;
@@ -21,7 +21,7 @@ namespace Application.Services
         private readonly IPublishVacancyUseCase _publishVacancyUseCase;
         private readonly IUnpublishVacancyUseCase _unPublishVacancyUseCase;
 
-        public VacancyServices(IAddVacancyUseCase addVacancyUseCase,
+        public VacancyService(IAddVacancyUseCase addVacancyUseCase,
                                IGetVacancyUseCase getVacancyUseCase,
                                IUpdateVacancyUseCase updateVacancyUseCase,
                                IDeleteVacancyUseCase deleteVacancyUseCase,

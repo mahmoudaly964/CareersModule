@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace Application.Responses
 {
-    public class SuccessResponse<T> : SuccessResponse
+    public class SuccessResponse<T>
     {
         public T? Result { get; set; }
         public int StatusCode { get; set; } = 200;

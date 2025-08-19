@@ -48,7 +48,7 @@ namespace CareersModule.Controllers
         public async Task<ActionResult<SuccessResponse<string>>> CreateVacancy([FromBody] AddVacancyDTO vacancy)
         {
             await _vacancyService.CreateVacancyAsync(vacancy);
-            var response = new SuccessResponse<string>("Vacancy created successfully");
+            var response = new SuccessResponse<string>("Vacancy created successfully",201);
             return Created("",response);
         }
 
