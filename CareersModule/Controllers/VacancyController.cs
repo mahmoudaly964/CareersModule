@@ -40,6 +40,18 @@ namespace CareersModule.Controllers
             var response = new SuccessResponse<IEnumerable<VacancyResponseDTO>>(vacancies);
             return Ok(response);
         }
+        [HttpGet("published")]
+        [ProducesResponseType(typeof(SuccessResponse<IEnumerable<VacancyResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<SuccessResponse<IEnumerable<VacancyResponseDTO>>>> GetPublishedVacancies(
+            [FromQuery] string? role,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var vacancies = await _vacancyService.GetAllPublishedVacanciesAsync(role, pageNumber, pageSize);
+            var response = new SuccessResponse<IEnumerable<VacancyResponseDTO>>(vacancies);
+            return Ok(response);
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status201Created)]

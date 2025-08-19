@@ -11,6 +11,7 @@ namespace Application.Services_Interfaces
     public interface IVacancyService
     {
         Task<IEnumerable<VacancyResponseDTO>> GetAllVacanciesAsync(string? role, int pageNumber, int pageSize);
+        Task<IEnumerable<VacancyResponseDTO>> GetAllPublishedVacanciesAsync(string? role, int pageNumber, int pageSize);
         Task<VacancyResponseDTO> GetVacancyByIdAsync(Guid vacancyId);
         Task CreateVacancyAsync(AddVacancyDTO vacancy);
         Task UpdateVacancyAsync(UpdateVacancyDTO updateVacancyDTO, Guid vacancyId);

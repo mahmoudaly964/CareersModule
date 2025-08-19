@@ -44,6 +44,7 @@ builder.Services.AddScoped<IDeleteVacancyUseCase, DeleteVacancyUseCase>();
 builder.Services.AddScoped<IListVacancyUseCase, ListVacancyUseCase>();
 builder.Services.AddScoped<IPublishVacancyUseCase, PublishVacancyUseCase>();
 builder.Services.AddScoped<IUnpublishVacancyUseCase, UnpublishVacancyUseCase>();
+builder.Services.AddScoped<IListPublishedVacancyUseCase, ListPublishedVacancyUseCase>();
 //register services
 builder.Services.AddScoped<IVacancyService, VacancyService>();
 
@@ -53,6 +54,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -60,7 +62,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

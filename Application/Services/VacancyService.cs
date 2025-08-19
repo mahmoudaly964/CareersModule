@@ -20,6 +20,7 @@ namespace Application.Services
         private readonly IListVacancyUseCase _listVacancyUseCase;
         private readonly IPublishVacancyUseCase _publishVacancyUseCase;
         private readonly IUnpublishVacancyUseCase _unPublishVacancyUseCase;
+        private readonly IListPublishedVacancyUseCase _listPublishedVacancyUseCase;
 
         public VacancyService(IAddVacancyUseCase addVacancyUseCase,
                                IGetVacancyUseCase getVacancyUseCase,
@@ -27,7 +28,8 @@ namespace Application.Services
                                IDeleteVacancyUseCase deleteVacancyUseCase,
                                IListVacancyUseCase listVacancyUseCase,
                                IPublishVacancyUseCase publishVacancyUseCase,
-                               IUnpublishVacancyUseCase unPublishVacancyUseCase)
+                               IUnpublishVacancyUseCase unPublishVacancyUseCase,
+                               IListPublishedVacancyUseCase listPublishedVacancyUseCase)
         {
             _addVacancyUseCase = addVacancyUseCase;
             _getVacancyUseCase = getVacancyUseCase;
@@ -36,13 +38,17 @@ namespace Application.Services
             _listVacancyUseCase = listVacancyUseCase;
             _publishVacancyUseCase = publishVacancyUseCase;
             _unPublishVacancyUseCase = unPublishVacancyUseCase;
+            _listPublishedVacancyUseCase = listPublishedVacancyUseCase;
         }
 
         public async Task<IEnumerable<VacancyResponseDTO>> GetAllVacanciesAsync(string? role, int pageNumber, int pageSize)
         {
             return await _listVacancyUseCase.ExecuteAsync(role, pageNumber, pageSize);
         }
-
+        public async Task<IEnumerable<VacancyResponseDTO>> GetAllPublishedVacanciesAsync(string? role, int pageNumber, int pageSize)
+        {
+            return await _listPublishedVacancyUseCase.ExecuteAsync(role, pageNumber, pageSize);
+        }
         public async Task<VacancyResponseDTO> GetVacancyByIdAsync(Guid vacancyId)
         {
             return await _getVacancyUseCase.ExecuteAsync(vacancyId);
