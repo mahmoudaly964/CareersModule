@@ -29,7 +29,6 @@ namespace Application.UseCases
             if(vacancy == null)
             {
                 throw new NotFoundException("Vacancy", vacancyId);
-
             }
             await _vacancyRepository.UnPublishVacancy(vacancyId);
             await _unitOfWork.SaveChangesAsync();
