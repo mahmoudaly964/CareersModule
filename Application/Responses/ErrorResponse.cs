@@ -12,6 +12,8 @@ namespace Application.Responses
         public int StatusCode { get; set; }
         public string Message { get; set; } = string.Empty;
         public string? Details { get; set; } = null;
+        public bool isSuccess { get; set; } = false;
+
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         public override string ToString()
