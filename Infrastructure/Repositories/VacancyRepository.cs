@@ -35,27 +35,6 @@ namespace Infrastructure.Repositories
                 await UpdateAsync(vacancy);
             }
         }
-        public  async Task<IEnumerable<Vacancy>> GetAllPublishedAsync(Expression<Func<Vacancy, bool>>? filter = null,
-                                                                    int? pageNumber = 1,
-                                                                    int? pageSize = 10,
-                                                                    bool tracking = true)
-        {
-            IQueryable<Vacancy> query = tracking ? _dbSet : _dbSet.AsNoTracking();
-
-            query = query.Where(v => v.IsPublished);
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (pageNumber.HasValue && pageSize.HasValue)
-            {
-                query = query.Skip((pageNumber.Value - 1) * pageSize.Value)
-                           .Take(pageSize.Value);
-            }
-
-            return await query.ToListAsync();
-        }
+ 
     }
 }
