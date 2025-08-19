@@ -1,4 +1,5 @@
-﻿using Application.UseCasesInterfaces.VacancyUseCase;
+﻿using Application.Exceptions;
+using Application.UseCasesInterfaces.VacancyUseCase;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Application.UseCases
             var vacancy = await _vacancyRepository.GetByIdAsync(vacancyId);
             if (vacancy == null)
             {
-                throw new KeyNotFoundException($"Vacancy with ID {vacancyId} not found.");
+                throw new NotFoundException("Vacancy", vacancyId);
             }
             await _vacancyRepository.UnPublishVacancy(vacancyId);
             await _unitOfWork.SaveChangesAsync();

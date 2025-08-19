@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Vacancy;
+using Application.Exceptions;
 using Application.UseCasesInterfaces.VacancyUseCase;
 using AutoMapper;
 using Domain.Interfaces;
@@ -27,7 +28,7 @@ namespace Application.UseCases
 
             if (vacancy == null)
             {
-                throw new KeyNotFoundException($"Vacancy with ID {vacancyId} not found.");
+                throw new NotFoundException("Vacancy", vacancyId);
             }
 
             return _mapper.Map<VacancyResponseDTO>(vacancy);

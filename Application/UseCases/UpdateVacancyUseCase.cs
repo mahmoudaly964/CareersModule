@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Vacancy;
+using Application.Exceptions;
 using Application.UseCasesInterfaces.Vacancy;
 using AutoMapper;
 using Domain.Entities;
@@ -27,7 +28,7 @@ namespace Application.UseCases
             var existingVacancy = await _vacancyRepository.GetByIdAsync(vacancyId);
             if(existingVacancy == null)
             {
-                throw new KeyNotFoundException($"Vacancy with ID {vacancyId} not found.");
+                throw new NotFoundException("Vacancy", vacancyId);
             }
             _mapper.Map( updateVacancyDTO, existingVacancy);
             await _vacancyRepository.UpdateAsync(existingVacancy);
