@@ -28,12 +28,23 @@ namespace Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
-                                             int? pageNumber = 1,
-                                             int? pageSize = 10,
-                                             bool tracking = true)
+        public async Task<IEnumerable<T>> GetAllAsync(
+            Expression<Func<T, bool>>? filter = null,
+            int? pageNumber = 1,
+            int? pageSize = 10,
+            bool tracking = true,
+            string? includeProperties = null)
         {
-            IQueryable<T> query = tracking ? _dbSet : _dbSet.AsNoTracking();  
+            IQueryable<T> query = tracking ? _dbSet : _dbSet.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+
             if (filter != null)
             {
                 query = query.Where(filter);
