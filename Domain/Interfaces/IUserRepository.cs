@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IUserRepository:IRepository<ApplicationUser>
+    public interface IUserRepository : IRepository<ApplicationUser>
     {
+        Task<ApplicationUser?> GetByEmailAsync(string email);
+        Task<bool> EmailExistsAsync(string email);
+        Task<bool> VerifyPasswordAsync(ApplicationUser user, string password);
+        Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password);
     }
 }

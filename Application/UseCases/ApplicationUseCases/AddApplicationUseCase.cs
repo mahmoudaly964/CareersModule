@@ -36,12 +36,6 @@ namespace Application.UseCases.ApplicationUseCases
                 throw new ArgumentNullException(nameof(applicationDTO), "Application data cannot be null.");
             }
 
-            var candidate = await _candidateRepository.GetByIdAsync(applicationDTO.CandidateId);
-            if (candidate == null)
-            {
-                throw new NotFoundException("Candidate", applicationDTO.CandidateId);
-            }
-
             // Verify vacancy exists and is published
             var vacancy = await _vacancyRepository.GetByIdAsync(applicationDTO.VacancyId);
             if (vacancy == null || !vacancy.IsPublished)
@@ -49,18 +43,28 @@ namespace Application.UseCases.ApplicationUseCases
                 throw new NotFoundException("Vacancy", applicationDTO.VacancyId);
             }
 
-            // Check if application already exists
-            var existingApplications = await _applicationRepository.GetAllAsync(
-                a => a.CandidateId == applicationDTO.CandidateId && a.VacancyId == applicationDTO.VacancyId);
+            // Check if user already applied for this specific vacancy
+            var existingCandidates = await _candidateRepository.GetAllAsync(
+                c => c.UserId == applicationDTO.UserId);
 
-            if (existingApplications.Any())
+            if (existingCandidates.Any())
             {
-                throw new InvalidOperationException("You have already applied for this job");
+                var existingApplications = await _applicationRepository.GetAllAsync(
+                    a => existingCandidates.Select(c => c.Id).Contains(a.CandidateId) &&
+                         a.VacancyId == applicationDTO.VacancyId);
+
+                if (existingApplications.Any())
+                {
+                    throw new InvalidOperationException("You have already applied for this job");
+                }
             }
 
-            var application = _mapper.Map<Domain.Entities.Application>(applicationDTO);
+            var candidate = _mapper.Map<Candidate>(applicationDTO);
 
-            application.Status = "Pending";
+            await _candidateRepository.AddAsync(candidate);
+            await _unitOfWork.SaveChangesAsync();
+            var application =_mapper.Map<Domain.Entities.Application>(applicationDTO);
+            application.CandidateId = candidate.Id;
 
             await _applicationRepository.AddAsync(application);
             await _unitOfWork.SaveChangesAsync();
