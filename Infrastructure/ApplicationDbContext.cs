@@ -1,9 +1,11 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -17,7 +19,7 @@ namespace Infrastructure
         public DbSet<Candidate> Candidates { get; set; }
         public DbSet<CandidateAnswer> CandidateAnswers { get; set; }
         public DbSet<Interview> Interviews { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,7 +35,7 @@ namespace Infrastructure
 
         private void ConfigureOneToOneRelationships(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<ApplicationUser>()
                 .HasOne(u => u.Candidate)
                 .WithOne(c => c.User)
                 .HasForeignKey<Candidate>(c => c.UserId)
@@ -117,7 +119,7 @@ namespace Infrastructure
                 .HasIndex(a => new { a.CandidateId, a.VacancyId })
                 .IsUnique();
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<ApplicationUser>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
         }

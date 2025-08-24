@@ -38,7 +38,7 @@ namespace Domain.Entities
         public string Degree { get; set; } = string.Empty;
 
         // Navigation
-        public User User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
         public ICollection<Application> Applications { get; set; } = new List<Application>();
     }
 

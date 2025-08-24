@@ -5,10 +5,12 @@ using Application.UseCases.VacancyUseCases;
 using Application.UseCasesInterfaces.Vacancy;
 using Application.UseCasesInterfaces.VacancyUseCase;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Interfaces;
 using DotNetEnv;
 using Infrastructure;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Presentation.Middlewares;
@@ -27,6 +29,21 @@ if (string.IsNullOrEmpty(connectionString))
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+
+    // User settings
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 //register unit of work
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Register Repositories
