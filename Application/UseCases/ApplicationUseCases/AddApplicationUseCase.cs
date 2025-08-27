@@ -4,6 +4,7 @@ using Application.UseCasesInterfaces.ApplicationUseCase;
 using AutoMapper;
 using Domain.Interfaces;
 using Domain.Entities;
+using Application.Services_Interfaces;
 
 namespace Application.UseCases.ApplicationUseCases
 {
@@ -12,6 +13,7 @@ namespace Application.UseCases.ApplicationUseCases
         private readonly IApplicationRepository _applicationRepository;
         private readonly ICandidateRepository _candidateRepository;
         private readonly IVacancyRepository _vacancyRepository;
+        private readonly IEmailService _emailService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -20,13 +22,14 @@ namespace Application.UseCases.ApplicationUseCases
             ICandidateRepository candidateRepository,
             IVacancyRepository vacancyRepository,
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,IEmailService emailService)
         {
             _applicationRepository = applicationRepository;
             _candidateRepository = candidateRepository;
             _vacancyRepository = vacancyRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task ExecuteAsync(AddApplicationDTO applicationDTO)
@@ -36,14 +39,12 @@ namespace Application.UseCases.ApplicationUseCases
                 throw new ArgumentNullException(nameof(applicationDTO), "Application data cannot be null.");
             }
 
-            // Verify vacancy exists and is published
             var vacancy = await _vacancyRepository.GetByIdAsync(applicationDTO.VacancyId);
             if (vacancy == null || !vacancy.IsPublished)
             {
                 throw new NotFoundException("Vacancy", applicationDTO.VacancyId);
             }
 
-            // Check if user already applied for this specific vacancy
             var existingCandidates = await _candidateRepository.GetAllAsync(
                 c => c.UserId == applicationDTO.UserId);
 
@@ -53,10 +54,10 @@ namespace Application.UseCases.ApplicationUseCases
                     a => existingCandidates.Select(c => c.Id).Contains(a.CandidateId) &&
                          a.VacancyId == applicationDTO.VacancyId);
 
-                if (existingApplications.Any())
-                {
-                    throw new InvalidOperationException("You have already applied for this job");
-                }
+                //if (existingApplications.Any())
+                //{
+                //    throw new InvalidOperationException("You have already applied for this job");
+                //}
             }
 
             var candidate = _mapper.Map<Candidate>(applicationDTO);
@@ -68,6 +69,14 @@ namespace Application.UseCases.ApplicationUseCases
 
             await _applicationRepository.AddAsync(application);
             await _unitOfWork.SaveChangesAsync();
+            var email = await _applicationRepository.GetCandidateEmailByApplicationId(application.Id);   
+            var name = await _applicationRepository.GetCandidateNameByApplicationId(application.Id);
+            var vacancyTitle =await _applicationRepository.GetVacancyTitleByApplicationId(application.Id);
+
+            if (email !=null && name!=null&&vacancyTitle!=null )
+            {
+                await _emailService.SendApplicationConfirmationEmail(email, name , vacancyTitle);
+            }
         }
     }
 }

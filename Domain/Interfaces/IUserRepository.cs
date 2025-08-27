@@ -12,6 +12,7 @@ namespace Domain.Interfaces
         Task<ApplicationUser?> GetByEmailAsync(string email);
         Task<bool> EmailExistsAsync(string email);
         Task<bool> VerifyPasswordAsync(ApplicationUser user, string password);
-        Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password);
+        Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password,string?role=null);
+        Task<string?> GetRoleAsync(ApplicationUser user);
     }
 }

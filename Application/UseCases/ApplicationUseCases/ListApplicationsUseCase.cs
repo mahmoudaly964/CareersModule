@@ -32,27 +32,22 @@ namespace Application.UseCases.ApplicationUseCases
 
             Expression<Func<Domain.Entities.Application, bool>>? filter = null;
 
-            // Filter by status
             if (!string.IsNullOrEmpty(status))
             {
                 var lowerStatus = status.ToLower();
                 filter = a => a.Status.ToLower().Contains(lowerStatus);
             }
 
-            // Filter by vacancy ID
             else if (vacancyId.HasValue)
             {
                 filter = a => a.VacancyId == vacancyId.Value;
             }
 
-            // Filter by candidate ID
             else if (candidateId.HasValue)
             {
                 filter = a => a.CandidateId == candidateId.Value;
             }
 
-
-            // Filter by candidate name (search in User.FullName)
             else if (!string.IsNullOrEmpty(candidateName))
             {
                 var lowerCandidateName = candidateName.ToLower();
@@ -61,7 +56,6 @@ namespace Application.UseCases.ApplicationUseCases
                                         a.Candidate.User.FullName.ToLower().Contains(lowerCandidateName);
             }
 
-            // Filter by vacancy title
             else if (!string.IsNullOrEmpty(vacancyTitle))
             {
                 var lowerVacancyTitle = vacancyTitle.ToLower();

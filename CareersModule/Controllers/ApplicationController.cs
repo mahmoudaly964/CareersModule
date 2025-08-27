@@ -1,6 +1,7 @@
 using Application.DTOs.Application;
 using Application.Responses;
 using Application.Services_Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareersModule.Controllers
@@ -17,6 +18,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpGet("{applicationId}")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<ApplicationResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -28,6 +30,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<IEnumerable<ApplicationResponseDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SuccessResponse<IEnumerable<ApplicationResponseDTO>>>> GetApplications(
@@ -46,6 +49,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -57,6 +61,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpPatch("{applicationId}/status")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]

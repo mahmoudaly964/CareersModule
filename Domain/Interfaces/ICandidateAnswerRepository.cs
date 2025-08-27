@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ICandidateAnswerRepository:IRepository<CandidateAnswer>
+    public interface ICandidateAnswerRepository : IRepository<CandidateAnswer>
     {
+        Task<CandidateAnswer?> GetAnswerAsync(Guid sessionId, Guid questionId);
+        Task<IEnumerable<CandidateAnswer>> GetSessionAnswersAsync(Guid sessionId);
     }
 }

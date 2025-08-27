@@ -1,6 +1,7 @@
 ﻿using Application.Services_Interfaces;
 using Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -24,7 +25,7 @@ namespace Application.Services
                 ?? throw new InvalidOperationException("JWT_AUDIENCE environment variable is not configured");
         }
 
-        public string GenerateAccessToken(ApplicationUser user)
+        public string GenerateAccessToken(ApplicationUser user,string?role=null)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             
@@ -36,7 +37,10 @@ namespace Application.Services
                 new(ClaimTypes.Name, user.UserName ?? string.Empty),       
                 new(ClaimTypes.Email, user.Email ?? string.Empty),                   
             };
-
+            if (!string.IsNullOrEmpty(role))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),                      

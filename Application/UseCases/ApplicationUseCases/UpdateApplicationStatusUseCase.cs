@@ -24,7 +24,6 @@ namespace Application.UseCases.ApplicationUseCases
                 throw new NotFoundException("Application", applicationId);
             }
 
-            // Validate status transition
             var validStatuses = new[] { "Pending", "Shortlisted", "Rejected", "Hired" };
             if (!validStatuses.Contains(statusDTO.Status))
             {

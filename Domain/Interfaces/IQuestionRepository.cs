@@ -9,5 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IQuestionRepository:IRepository<Question>
     {
+        public Task<Question?> GetByIdAsync(Guid id);
     }
 }

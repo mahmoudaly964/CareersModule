@@ -1,10 +1,18 @@
 using Application.Mapping;
 using Application.Services;
-using Application.Services_Interfaces; // Ensure AutoMapper namespace is included
+using Application.Services_Interfaces;
 using Application.UseCases.ApplicationUseCases;
+using Application.UseCases.AssessmentUseCases;
+using Application.UseCases.InterviewFeedbackUseCase;
+using Application.UseCases.InterviewUseCases;
+using Application.UseCases.QuestionUseCases;
 using Application.UseCases.UserUseCases;
 using Application.UseCases.VacancyUseCases;
 using Application.UseCasesInterfaces.ApplicationUseCase;
+using Application.UseCasesInterfaces.AssessmentUseCase;
+using Application.UseCasesInterfaces.InterviewFeedback;
+using Application.UseCasesInterfaces.InterviewUseCase;
+using Application.UseCasesInterfaces.QuestionUseCase;
 using Application.UseCasesInterfaces.UserUseCase;
 using Application.UseCasesInterfaces.Vacancy;
 using Application.UseCasesInterfaces.VacancyUseCase;
@@ -87,13 +95,26 @@ builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+builder.Services.AddScoped<IQuestionSessionRepository, QuestionSessionRepository>();
+builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
+builder.Services.AddScoped<IAssessmentSessionRepository, AssessmentSessionRepository>();
+builder.Services.AddScoped<ICandidateAnswerRepository, CandidateAnswerRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<IInterviewRepository, InterviewRepository>();
+builder.Services.AddScoped<IInterviewFeedbackRepository,InterviewFeedbackRepository>();
+
 // Register Auto mapper 
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<VacancyMapping>();
     cfg.AddProfile<ApplicationMapping>();
+    cfg.AddProfile<AssessmentMapping>();
+    cfg.AddProfile<QuestionMapping>();
+    cfg.AddProfile<UserMapping>();
+    cfg.AddProfile<InterviewMapping>();
 });
 // Register Use Cases
+//vacancy use cases
 builder.Services.AddScoped<IAddVacancyUseCase, AddVacancyUseCase>();
 builder.Services.AddScoped<IGetVacancyUseCase, GetVacancyUseCase>();
 builder.Services.AddScoped<IUpdateVacancyUseCase, UpdateVacancyUseCase>();
@@ -102,18 +123,43 @@ builder.Services.AddScoped<IListVacancyUseCase, ListVacancyUseCase>();
 builder.Services.AddScoped<IPublishVacancyUseCase, PublishVacancyUseCase>();
 builder.Services.AddScoped<IUnpublishVacancyUseCase, UnpublishVacancyUseCase>();
 builder.Services.AddScoped<IListPublishedVacancyUseCase, ListPublishedVacancyUseCase>();
+//application use cases
 builder.Services.AddScoped<IGetApplicationUseCase, GetApplicationUseCase>();
 builder.Services.AddScoped<IAddApplicationUseCase, AddApplicationUseCase>();
 builder.Services.AddScoped<IListApplicationsUseCase, ListApplicationsUseCase>();
 builder.Services.AddScoped<IUpdateApplicationStatusUseCase, UpdateApplicationStatusUseCase>();
-
+//assessment use cases
+builder.Services.AddScoped<ICreateAssessmentUseCase, CreateAssessmentUseCase>();
+builder.Services.AddScoped<IGetAssessmentUseCase, GetAssessmentUseCase>();
+builder.Services.AddScoped<IStartAssessmentUseCase, StartAssessmentUseCase>();
+builder.Services.AddScoped<IStartQuestionUseCase, StartQuestionUseCase>();
+builder.Services.AddScoped<ISubmitAnswerUseCase, SubmitAnswerUseCase>();
+builder.Services.AddScoped<ISubmitAssessmentUseCase, SubmitAssessmentUseCase>();
+//question use cases
+builder.Services.AddScoped<IAddQuestionUseCase, AddQuestionUseCase>();
+builder.Services.AddScoped<IUpdateQuestionUseCase, UpdateQuestionUseCase>();
+builder.Services.AddScoped<IDeleteQuestionUseCase, DeleteQuestionUseCase>();
+//user use cases
 builder.Services.AddScoped<ISignUpUseCase, SignUpUseCase>();
+builder.Services.AddScoped<ISignUpAdminUseCase, SignUpAdminUseCase>();
 builder.Services.AddScoped<ILogInUseCase, LogInUseCase>();
+// interview usecases
+builder.Services.AddScoped<IScheduleInterviewUseCase, ScheduleInterviewUseCase>();
+builder.Services.AddScoped<IRescheduleInterviewUseCase, RescheduleInterviewUseCase>();
+builder.Services.AddScoped<ICancelInterviewUseCase, CancelInterviewUseCase>();
+//interview feedback use case
+builder.Services.AddScoped<IAddInterviewFeedbackUseCase, AddInterviewFeedbackUseCase>();
+
 //register services
 builder.Services.AddScoped<IVacancyService, VacancyService>();
 builder.Services.AddScoped<IApplicationService,ApplicationService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAssessmentService, AssessmentService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IInterviewService, InterviewService>();
+builder.Services.AddScoped<IInterviewFeedbackService, InterviewFeedbackService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

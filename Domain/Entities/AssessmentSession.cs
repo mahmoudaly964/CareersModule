@@ -27,6 +27,7 @@ namespace Domain.Entities
         // Navigation properties
         public Application Application { get; set; } = null!;
         public Assessment Assessment { get; set; } = null!;
+        public ICollection<QuestionSession> QuestionSessions { get; set; } = new List<QuestionSession>();
         public ICollection<CandidateAnswer> Answers { get; set; } = new List<CandidateAnswer>();
     }
 }

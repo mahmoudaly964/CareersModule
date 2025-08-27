@@ -9,7 +9,7 @@ namespace Application.Services_Interfaces
 {
     public interface IJwtService
     {
-        public string GenerateAccessToken(ApplicationUser user);
+        public string GenerateAccessToken(ApplicationUser user,string? role=null);
         public string GenerateRefreshToken(ApplicationUser user);
         public bool ValidateToken(string token);
     }

@@ -2,6 +2,7 @@ using Application.DTOs.Vacancy;
 using Application.Responses;
 using Application.Services_Interfaces;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareersModule.Controllers
@@ -18,6 +19,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpGet("{vacancyId}")]
+        [Authorize]
         [ProducesResponseType(typeof(SuccessResponse<VacancyResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -29,6 +31,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(typeof(SuccessResponse<IEnumerable<VacancyResponseDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SuccessResponse<IEnumerable<VacancyResponseDTO>>>> GetVacancies(
@@ -41,6 +44,7 @@ namespace CareersModule.Controllers
             return Ok(response);
         }
         [HttpGet("published")]
+        [Authorize]
         [ProducesResponseType(typeof(SuccessResponse<IEnumerable<VacancyResponseDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SuccessResponse<IEnumerable<VacancyResponseDTO>>>> GetPublishedVacancies(
@@ -54,6 +58,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -65,6 +70,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpPut("{vacancyId}")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -77,6 +83,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpDelete("{vacancyId}")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -88,6 +95,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpPatch("{vacancyId}/publish")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -99,6 +107,7 @@ namespace CareersModule.Controllers
         }
 
         [HttpPatch("{vacancyId}/unpublish")]
+        [Authorize(Roles = "ADMIN")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]

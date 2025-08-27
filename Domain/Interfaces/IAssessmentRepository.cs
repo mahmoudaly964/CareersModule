@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IAssessmentRepository:IRepository<Assessment>
+    public interface IAssessmentRepository : IRepository<Assessment>
     {
+        Task<Assessment?> GetAssessmentAsync(Guid assessmentId);
+        Task<Assessment?> GetAssessmentForCandidateAsync(Guid assessmentId, Guid applicationId);
     }
 }

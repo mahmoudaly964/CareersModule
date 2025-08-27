@@ -409,6 +409,33 @@ namespace Infrastructure.Migrations
                     b.ToTable("QuestionOptions");
                 });
 
+            modelBuilder.Entity("Domain.Entities.QuestionSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssessmentSessionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssessmentSessionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("QuestionSessions");
+                });
+
             modelBuilder.Entity("Domain.Entities.Vacancy", b =>
                 {
                     b.Property<Guid>("Id")
@@ -710,6 +737,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("Domain.Entities.QuestionSession", b =>
+                {
+                    b.HasOne("Domain.Entities.AssessmentSession", "AssessmentSession")
+                        .WithMany("QuestionSessions")
+                        .HasForeignKey("AssessmentSessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Question", "Question")
+                        .WithMany("QuestionSessions")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AssessmentSession");
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -783,6 +829,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.AssessmentSession", b =>
                 {
                     b.Navigation("Answers");
+
+                    b.Navigation("QuestionSessions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Candidate", b =>
@@ -800,6 +848,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("CandidateAnswers");
 
                     b.Navigation("Options");
+
+                    b.Navigation("QuestionSessions");
                 });
 
             modelBuilder.Entity("Domain.Entities.QuestionOption", b =>

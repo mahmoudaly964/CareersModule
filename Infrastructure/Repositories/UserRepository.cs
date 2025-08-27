@@ -7,11 +7,14 @@ namespace Infrastructure.Repositories
     public class UserRepository : Repository<ApplicationUser>, IUserRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole<Guid>>_roleManager;
 
-        public UserRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager) 
+        public UserRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole<Guid>> roleManager)
             : base(context)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<ApplicationUser?> GetByEmailAsync(string email)
@@ -31,7 +34,7 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password)
+        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user, string password,string? role=null)
         {
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
@@ -39,7 +42,21 @@ namespace Infrastructure.Repositories
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new InvalidOperationException($"Failed to create user: {errors}");
             }
+            if(role!=null)
+            {
+                if (!await _roleManager.RoleExistsAsync("ADMIN"))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole<Guid>("ADMIN"));
+                }
+                await _userManager.AddToRoleAsync(user, "ADMIN");
+            }
             return user;
         }
+        public async Task<string?> GetRoleAsync(ApplicationUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.FirstOrDefault();
+        }
     }
+
 }

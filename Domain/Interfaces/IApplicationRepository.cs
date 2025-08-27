@@ -9,5 +9,8 @@ namespace Domain.Interfaces
 {
     public interface IApplicationRepository:IRepository<Application>
     {
+        public Task<string?> GetCandidateEmailByApplicationId(Guid applicationId);
+        public Task<string?> GetCandidateNameByApplicationId(Guid applicationId);
+        public Task<string?> GetVacancyTitleByApplicationId(Guid applicationId);   
     }
 }

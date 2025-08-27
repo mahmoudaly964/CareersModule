@@ -39,8 +39,9 @@ namespace Application.UseCases.UserUseCases
             {
                 throw new NotFoundException("Invalid email or password");
             }
-
-            var accessToken = _jwtService.GenerateAccessToken(user);
+            
+            var role = await _userRepository.GetRoleAsync(user);
+            var accessToken = _jwtService.GenerateAccessToken(user,role);
             var refreshToken = _jwtService.GenerateRefreshToken(user);
 
             return new AuthResponseDTO

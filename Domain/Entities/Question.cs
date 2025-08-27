@@ -32,6 +32,7 @@ namespace Domain.Entities
         // Navigation
         public Assessment Assessment { get; set; } = null!;
         public ICollection<QuestionOption>? Options { get; set; }
+        public ICollection<QuestionSession> QuestionSessions { get; set; } = new List<QuestionSession>();
         public ICollection<CandidateAnswer> CandidateAnswers { get; set; } = new List<CandidateAnswer>();
     }
 }

@@ -1,6 +1,7 @@
 using Application.DTOs.Auth;
 using Application.Responses;
 using Application.Services_Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareersModule.Controllers
@@ -14,6 +15,18 @@ namespace CareersModule.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpPost("signup/admin")]
+        [Authorize(Roles = "ADMIN")]
+        [ProducesResponseType(typeof(SuccessResponse<AuthResponseDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<SuccessResponse<AuthResponseDTO>>> SignupAdmin([FromBody] SignupDTO signupAdminDto)
+        {
+            var authResponse = await _userService.SignupAdminAsync(signupAdminDto);
+            var response = new SuccessResponse<AuthResponseDTO>(authResponse, 201);
+            return Created("", response);
         }
 
         [HttpPost("signup")]

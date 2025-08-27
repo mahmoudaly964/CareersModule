@@ -21,6 +21,7 @@ namespace Infrastructure
         public DbSet<Interview> Interviews { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
+        public DbSet<QuestionSession> QuestionSessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -107,6 +108,18 @@ namespace Infrastructure
                 .HasMany(i => i.Feedbacks)
                 .WithOne(f => f.Interview)
                 .HasForeignKey(f => f.InterviewId);
+
+            modelBuilder.Entity<AssessmentSession>()
+                .HasMany(s => s.QuestionSessions)
+                .WithOne(qs => qs.AssessmentSession)
+                .HasForeignKey(qs => qs.AssessmentSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.QuestionSessions)
+                .WithOne(qs => qs.Question)
+                .HasForeignKey(qs => qs.QuestionId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         private void ConfigureConstraints(ModelBuilder modelBuilder)

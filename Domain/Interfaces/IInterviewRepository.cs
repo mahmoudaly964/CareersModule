@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IInterviewRepository:IRepository<Interview>
+    public interface IInterviewRepository : IRepository<Interview>
     {
     }
 }

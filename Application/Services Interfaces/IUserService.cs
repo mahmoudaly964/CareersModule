@@ -11,6 +11,8 @@ namespace Application.Services_Interfaces
     {
         public  Task<AuthResponseDTO> LoginAsync(LoginDTO loginDto);
         public Task<AuthResponseDTO> SignupAsync(SignupDTO signupDto);
+        Task<AuthResponseDTO> SignupAdminAsync(SignupDTO signupAdminDto);
+
 
 
     }

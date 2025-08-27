@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.Auth;
 using Application.Services_Interfaces;
 using Application.UseCasesInterfaces.UserUseCase;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;
@@ -16,15 +17,18 @@ namespace Application.UseCases.UserUseCases
         private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public SignUpUseCase(
             IUserRepository userRepository,
             IJwtService jwtService,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork ,
+            IMapper mapper)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<AuthResponseDTO> ExecuteAsync(SignupDTO signupDto)
         {
@@ -32,14 +36,8 @@ namespace Application.UseCases.UserUseCases
             {
                 throw new InvalidOperationException("User with this email already exists");
             }
-
-            var user = new ApplicationUser
-            {
-                UserName = signupDto.Email,
-                Email = signupDto.Email,
-                FullName = signupDto.FullName,
-                CreatedAt = DateTime.UtcNow
-            };
+            var user = _mapper.Map<ApplicationUser>(signupDto);
+            user.CreatedAt = DateTime.UtcNow;
 
             var createdUser = await _userRepository.CreateUserAsync(user, signupDto.Password);
             await _unitOfWork.SaveChangesAsync();

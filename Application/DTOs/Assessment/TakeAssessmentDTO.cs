@@ -41,7 +41,6 @@ namespace Application.DTOs.Assessment
     {
         public Guid Id { get; set; }
         public string Text { get; set; } = string.Empty;
-        // IsCorrect is NOT included for candidates
     }
 
     public class CandidateAnswerDTO
